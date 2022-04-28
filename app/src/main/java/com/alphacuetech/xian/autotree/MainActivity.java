@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPref sf = new SharedPref();
-                sf.set_country(getApplicationContext(), selected_country[0]);
+                SharedPref sf = new SharedPref(getApplicationContext());
+                sf.set_country(selected_country[0]);
 
                 Intent i = new Intent(getApplicationContext(), Menu.class);
                 startActivity(i);

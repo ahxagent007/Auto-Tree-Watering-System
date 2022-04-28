@@ -4,8 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SharedPref {
+    Context context;
+    public SharedPref(Context context) {
+        this.context = context;
+    }
 
-    public void set_country(Context context, String country){
+    public String getUID(){
+        return "123";
+    }
+
+    public void set_country(String country){
 
         // Storing data into SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
@@ -20,7 +28,7 @@ public class SharedPref {
 
     }
 
-    public String get_country(Context context){
+    public String get_country(){
         // Retrieving the value using its keys the file name
         // must be same in both saving and retrieving the data
         SharedPreferences sh = context.getSharedPreferences("MySharedPref", context.MODE_PRIVATE);

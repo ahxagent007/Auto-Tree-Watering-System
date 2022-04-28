@@ -3,7 +3,6 @@ package com.alphacuetech.xian.autotree;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,15 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alphacuetech.xian.autotree.classes.DailyWeatherData;
-import com.alphacuetech.xian.autotree.classes.WeatherAPI;
+import com.alphacuetech.xian.autotree.Models.DailyWeatherData;
+import com.alphacuetech.xian.autotree.Models.WeatherAPI;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -37,9 +33,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -157,7 +150,7 @@ public class Menu extends AppCompatActivity implements LocationListener {
          * Provide a reference to the type of views that you are using
          * (custom ViewHolder).
          */
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
             private TextView TV_date, TV_status, TV_min, TV_max, TV_morn, TV_day, TV_eve, TV_night;
 
             public ViewHolder(View view) {
@@ -172,6 +165,28 @@ public class Menu extends AppCompatActivity implements LocationListener {
                 TV_day = (TextView) view.findViewById(R.id.TV_day);
                 TV_eve = (TextView) view.findViewById(R.id.TV_eve);
                 TV_night = (TextView) view.findViewById(R.id.TV_night);
+
+                view.setOnClickListener(this);
+                view.setOnLongClickListener(this);
+
+            }
+
+            private ItemClickListener clickListener;
+
+            public void setClickListener(ItemClickListener itemClickListener) {
+                this.clickListener = itemClickListener;
+            }
+
+            @Override
+            public void onClick(View view) {
+                clickListener.onClick(view, getPosition(), false);
+
+            }
+
+            @Override
+            public boolean onLongClick(View view) {
+                clickListener.onClick(view, getPosition(), true);
+                return true;
             }
         }
 
@@ -209,6 +224,19 @@ public class Menu extends AppCompatActivity implements LocationListener {
             viewHolder.TV_night.setText(convertKelvinToCelsius(daily.get((position)).getTemp().getNight()));
 
             Log.i(TAG, ""+daily.get((position)).getDt());
+
+            viewHolder.setClickListener(new ItemClickListener() {
+                @Override
+                public void onClick(View view, final int position, boolean isLongClick) {
+
+
+                    if (isLongClick) {
+
+                    } else {
+
+                    }
+                }
+            });
         }
 
         // Return the size of your dataset (invoked by the layout manager)

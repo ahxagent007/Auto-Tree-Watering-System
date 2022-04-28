@@ -1,4 +1,4 @@
-package com.alphacuetech.xian.autotree.classes;
+package com.alphacuetech.xian.autotree.Models;
 
 public class Weather {
     int id;
