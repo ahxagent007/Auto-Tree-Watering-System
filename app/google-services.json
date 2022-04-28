@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "333906865360",
+    "project_id": "auto-tree",
+    "storage_bucket": "auto-tree.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333906865360:android:944582d55af4302f2c82d5",
+        "android_client_info": {
+          "package_name": "com.alphacuetech.xian.autotree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333906865360-ec3kd5lmp8foso64si2bf2b6jhu36pir.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alphacuetech.xian.autotree",
+            "certificate_hash": "7803f3e97d557d5a463358e1e24e950610cdf341"
+          }
+        },
+        {
+          "client_id": "333906865360-9f8is21dfuv5l37sffdiov85ae85k7mp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbzmZwDDDzOPtYdFnW9MqVzvXu5DiRhEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333906865360-9f8is21dfuv5l37sffdiov85ae85k7mp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
