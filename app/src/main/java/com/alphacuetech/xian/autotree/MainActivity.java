@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Intent i = new Intent(getApplicationContext(), Menu.class);
+        startActivity(i);
+        finish();
     }
 
 

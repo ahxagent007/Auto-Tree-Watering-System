@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "333906865360",
+    "firebase_url": "https://auto-tree-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "auto-tree",
     "storage_bucket": "auto-tree.appspot.com"
   },

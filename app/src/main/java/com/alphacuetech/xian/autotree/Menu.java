@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -47,6 +48,9 @@ public class Menu extends AppCompatActivity implements LocationListener {
     String TAG = "XIAN";
     String TIME_ZONE = "Asia/Dhaka";
 
+    double lat = 23.7972;
+    double lon = 90.365;
+
     //String API_LINK_TEST = "https://api.openweathermap.org/data/2.5/onecall?lat=23.797214&lon=90.365007&exclude=current&appid=c33cae6efe8bce29a5eba0f84d6bad4c";
 
     RecyclerView RV_weather;
@@ -66,6 +70,8 @@ public class Menu extends AppCompatActivity implements LocationListener {
 
         //locationPermissionRequest();
         getLocation();
+
+        getWeatherData(""+lat, ""+lon, getApplicationContext());
 
     }
 
@@ -223,9 +229,7 @@ public class Menu extends AppCompatActivity implements LocationListener {
             viewHolder.TV_eve.setText(convertKelvinToCelsius(daily.get((position)).getTemp().getEve()));
             viewHolder.TV_night.setText(convertKelvinToCelsius(daily.get((position)).getTemp().getNight()));
 
-            Log.i(TAG, ""+daily.get((position)).getDt());
-
-            viewHolder.setClickListener(new ItemClickListener() {
+              viewHolder.setClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, final int position, boolean isLongClick) {
 
@@ -233,7 +237,11 @@ public class Menu extends AppCompatActivity implements LocationListener {
                     if (isLongClick) {
 
                     } else {
+                        DailyWeatherData d = daily.get((position));
 
+                        Intent at = new Intent(getApplicationContext(), TreeActivity.class);
+                        at.putExtra("DATA", d);
+                        startActivity(at);
                     }
                 }
             });
@@ -304,13 +312,10 @@ public class Menu extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        double lat = location.getLatitude();
-        double lon = location.getLongitude();
+        lat = location.getLatitude();
+        lon = location.getLongitude();
 
-        /*lat = 23.7972;
-        lon =  90.365;*/
-
-        //Toast.makeText(getApplicationContext(),  lat+ ", " +lon , Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),  lat+ ", " +lon , Toast.LENGTH_LONG).show();
         getWeatherData(""+lat, ""+lon, getApplicationContext());
     }
 

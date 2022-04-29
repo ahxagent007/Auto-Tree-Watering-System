@@ -1,6 +1,8 @@
 package com.alphacuetech.xian.autotree.Models;
 
-public class Temperature {
+import java.io.Serializable;
+
+public class Temperature implements Serializable {
     float day, min, max, night, eve, morn;
 
     public float getDay() {

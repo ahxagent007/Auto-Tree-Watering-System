@@ -8,8 +8,17 @@ public class Tree {
     int water_max;
     int temp_min;
     int temp_max;
+    String img;
 
     public Tree() {
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public int getTree_id() {

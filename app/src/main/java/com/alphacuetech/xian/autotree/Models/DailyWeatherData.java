@@ -1,8 +1,9 @@
 package com.alphacuetech.xian.autotree.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DailyWeatherData {
+public class DailyWeatherData implements Serializable {
     int dt;
     Temperature temp;
     FeelsLike feels_like;

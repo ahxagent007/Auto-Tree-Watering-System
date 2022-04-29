@@ -1,6 +1,8 @@
 package com.alphacuetech.xian.autotree.Models;
 
-public class Weather {
+import java.io.Serializable;
+
+public class Weather implements Serializable {
     int id;
     String main;
     String description;
