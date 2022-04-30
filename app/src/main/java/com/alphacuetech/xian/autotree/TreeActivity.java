@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -39,7 +40,7 @@ public class TreeActivity extends AppCompatActivity {
     FloatingActionButton FBTN_add;
 
     ArrayList<Tree> trees = new ArrayList<>();
-
+    DailyWeatherData daily;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,17 +49,15 @@ public class TreeActivity extends AppCompatActivity {
         RV_tree = findViewById(R.id.RV_tree);
         FBTN_add = findViewById(R.id.FBTN_add);
 
-        DailyWeatherData daily = (DailyWeatherData) getIntent().getSerializableExtra("DATA");
+        daily = (DailyWeatherData) getIntent().getSerializableExtra("DATA");
 
         Log.i(TAG, daily.toString());
 
         databaseRefTree = FirebaseDatabase.getInstance().getReference("TREE");
         databaseRefUserTree = FirebaseDatabase.getInstance().getReference("USER");
 
-        String uid = "123456"; //new SharedPref(getApplicationContext()).getUID()
-
         getTreesFirebase();
-        getUserTreesFirebase(uid);
+
 
         FBTN_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,22 +80,13 @@ public class TreeActivity extends AppCompatActivity {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     Tree tree = ds.getValue(Tree.class);
                     trees.add(tree);
+                    //Log.i(TAG, ds.toString());
                 }
 
-                /*new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
+                Log.i(TAG, "ALL TREE SIZE == "+trees.size());
 
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-                        RV_tree.setLayoutManager(mLayoutManager);
-
-                        //Collections.reverse(FoodMixDB);
-
-                        RecyclerView.Adapter mRecycleAdapter = new CustomAdapterRVTree(trees);
-                        RV_tree.setAdapter(mRecycleAdapter);
-
-                    }
-                });*/
+                String uid = "123456"; //new SharedPref(getApplicationContext()).getUID()
+                getUserTreesFirebase(uid);
 
             }
 
@@ -114,7 +104,7 @@ public class TreeActivity extends AppCompatActivity {
 
     public void getUserTreesFirebase(String uid){
         //Query query = databaseRef.orderByChild("tree_id").equalTo(new SharedPref(getApplicationContext()).getUID());
-        Query query = databaseRefUserTree.orderByKey().equalTo(uid);
+        Query query = databaseRefUserTree.child(uid);
         Log.i(TAG, new SharedPref(getApplicationContext()).getUID());
 
         ArrayList<Tree> user_trees = new ArrayList<>();
@@ -126,10 +116,22 @@ public class TreeActivity extends AppCompatActivity {
 
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     Tree tree = ds.getValue(Tree.class);
-                    Log.i(TAG, ""+tree.getTree_id());
+                    user_trees.add(tree);
                 }
 
-                /*new Handler().post(new Runnable() {
+                ArrayList<Tree> RVTrees = new ArrayList<>();
+
+                for (int i=0; i <user_trees.size(); i++){
+                    Tree t = user_trees.get(i);
+
+                    for (Tree tree : trees){
+                        if (tree.getTree_id() == t.getTree_id()){
+                            RVTrees.add(tree);
+                        }
+                    }
+                }
+
+                new Handler().post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -138,11 +140,11 @@ public class TreeActivity extends AppCompatActivity {
 
                         //Collections.reverse(FoodMixDB);
 
-                        RecyclerView.Adapter mRecycleAdapter = new CustomAdapterRVTree(trees);
+                        RecyclerView.Adapter mRecycleAdapter = new CustomAdapterRVTree(RVTrees);
                         RV_tree.setAdapter(mRecycleAdapter);
 
                     }
-                });*/
+                });
 
             }
 
@@ -157,7 +159,6 @@ public class TreeActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public class CustomAdapterRVTree extends RecyclerView.Adapter<CustomAdapterRVTree.ViewHolder> {
 
@@ -218,7 +219,13 @@ public class TreeActivity extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
             viewHolder.TV_name.setText(trees.get((position)).getTree_name());
-            viewHolder.TV_water.setText(trees.get((position)).getWater_max());
+
+            DecimalFormat df = new DecimalFormat("0.00");
+
+            double w_min = (trees.get(position).getWater_min()/trees.get(position).getTemp_min())*daily.getTemp().getMin();
+            double w_max = (trees.get(position).getWater_max()/trees.get(position).getTemp_max())*daily.getTemp().getMax();
+
+            viewHolder.TV_water.setText(df.format(w_min)+"-"+df.format(w_max)+" ml");
 
 
             viewHolder.setClickListener(new ItemClickListener() {
@@ -238,5 +245,9 @@ public class TreeActivity extends AppCompatActivity {
         public int getItemCount() {
             return trees.size();
         }
+    }
+
+    public void addTree(){
+
     }
 }

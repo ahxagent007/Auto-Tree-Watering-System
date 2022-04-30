@@ -15,15 +15,29 @@ import com.alphacuetech.xian.autotree.functions.SharedPref;
 
 public class MainActivity extends AppCompatActivity {
 
-    Spinner sp_location;
-    Button btn_done;
+    /*Spinner sp_location;
+    Button btn_done;*/
+
+    Button btn_water_plant, btn_device_status, btn_settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String country[] = {"China", "Bangladesh"};
+        btn_water_plant = findViewById(R.id.btn_water_plant);
+        btn_device_status = findViewById(R.id.btn_device_status);
+        btn_settings = findViewById(R.id.btn_settings);
+
+        btn_water_plant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Menu.class);
+                startActivity(i);
+            }
+        });
+
+        /*String country[] = {"China", "Bangladesh"};
         final String[] selected_country = {"China"};
 
         sp_location = findViewById(R.id.sp_location);
@@ -62,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(getApplicationContext(), Menu.class);
         startActivity(i);
-        finish();
+        finish();*/
     }
 
 
