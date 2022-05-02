@@ -128,7 +128,6 @@ public class Menu extends AppCompatActivity implements LocationListener {
         mRequestQueue.add(mStringRequest);
     }
 
-
     public String convertSecToDate(int second, String timezone){
 
         Date date = new Date(second * 1000L);

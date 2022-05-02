@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AutoTree">
         <activity
+            android:name=".Activities.DeviceActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.TreeActivity"
             android:exported="false" />
         <activity

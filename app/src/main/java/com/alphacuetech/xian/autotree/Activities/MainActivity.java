@@ -40,6 +40,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_device_status.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), DeviceActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btn_device_status.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Menu.class);
+                startActivity(i);
+            }
+        });
+
         /*String country[] = {"China", "Bangladesh"};
         final String[] selected_country = {"China"};
 
