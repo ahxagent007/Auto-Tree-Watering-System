@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_device_status.setOnClickListener(new View.OnClickListener() {
+        btn_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), Menu.class);
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(i);
             }
         });

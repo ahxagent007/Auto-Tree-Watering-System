@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.SettingsActivity"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/TV_uid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your User ID: "
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/TV_loc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Last Location: "
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"/>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

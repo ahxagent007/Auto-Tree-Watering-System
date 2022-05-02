@@ -358,7 +358,7 @@ public class TreeActivity extends AppCompatActivity {
             double w_min = (trees.get(position).getWater_min()/trees.get(position).getTemp_min())*daily.getTemp().getMin();
             double w_max = (trees.get(position).getWater_max()/trees.get(position).getTemp_max())*daily.getTemp().getMax();
 
-            //viewHolder.TV_water.setText(df.format(w_min)+"-"+df.format(w_max)+" ml");
+            viewHolder.TV_water.setText("Suited Weather: "+trees.get(position).getTemp_min()+"-"+trees.get(position).getTemp_max()+" C");
 
             Glide.with(getApplicationContext())
                     .load(trees.get(position).getImg())

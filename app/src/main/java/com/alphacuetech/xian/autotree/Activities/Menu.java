@@ -29,6 +29,7 @@ import com.alphacuetech.xian.autotree.ItemClickListener;
 import com.alphacuetech.xian.autotree.Models.DailyWeatherData;
 import com.alphacuetech.xian.autotree.Models.WeatherAPI;
 import com.alphacuetech.xian.autotree.R;
+import com.alphacuetech.xian.autotree.functions.SharedPref;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -50,8 +51,8 @@ public class Menu extends AppCompatActivity implements LocationListener {
     String TAG = "XIAN";
     String TIME_ZONE = "Asia/Dhaka";
 
-    double lat = 23.7972;
-    double lon = 90.365;
+    double lat;// = 23.7972;
+    double lon;// = 90.365;
 
     //String API_LINK_TEST = "https://api.openweathermap.org/data/2.5/onecall?lat=23.797214&lon=90.365007&exclude=current&appid=c33cae6efe8bce29a5eba0f84d6bad4c";
 
@@ -72,6 +73,9 @@ public class Menu extends AppCompatActivity implements LocationListener {
 
         //locationPermissionRequest();
         getLocation();
+
+        lat = new SharedPref(getApplicationContext()).getLastLat();
+        lon = new SharedPref(getApplicationContext()).getLastLon();
 
         getWeatherData(""+lat, ""+lon, getApplicationContext());
 
@@ -315,6 +319,9 @@ public class Menu extends AppCompatActivity implements LocationListener {
     public void onLocationChanged(Location location) {
         lat = location.getLatitude();
         lon = location.getLongitude();
+
+        new SharedPref(getApplicationContext()).setLastLat(lat);
+        new SharedPref(getApplicationContext()).setLastLon(lon);
 
         Toast.makeText(getApplicationContext(),  lat+ ", " +lon , Toast.LENGTH_LONG).show();
         getWeatherData(""+lat, ""+lon, getApplicationContext());

@@ -27,6 +27,42 @@ public class SharedPref {
         myEdit.commit();
 
     }
+    public double getLastLat(){
+
+        SharedPreferences sh = context.getSharedPreferences("MySharedPref", context.MODE_PRIVATE);
+
+        float lon = sh.getFloat("Lat", (float) 23.7972);
+
+        return (double) lon;
+    }
+
+    public void setLastLat(double lat){
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        myEdit.putFloat("Lat", (float) lat);
+
+        myEdit.commit();
+
+    }
+    public double getLastLon(){
+
+        SharedPreferences sh = context.getSharedPreferences("MySharedPref", context.MODE_PRIVATE);
+
+        float lon = sh.getFloat("Long", (float) 90.365);
+
+        return (double) lon;
+    }
+
+    public void setLastLon(double lon){
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        myEdit.putFloat("Long", (float) lon);
+
+        myEdit.commit();
+
+    }
 
     public void set_country(String country){
 
