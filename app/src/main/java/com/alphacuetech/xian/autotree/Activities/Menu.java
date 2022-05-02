@@ -1,4 +1,4 @@
-package com.alphacuetech.xian.autotree;
+package com.alphacuetech.xian.autotree.Activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -25,8 +25,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alphacuetech.xian.autotree.ItemClickListener;
 import com.alphacuetech.xian.autotree.Models.DailyWeatherData;
 import com.alphacuetech.xian.autotree.Models.WeatherAPI;
+import com.alphacuetech.xian.autotree.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;

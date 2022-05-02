@@ -14,12 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AutoTree">
         <activity
-            android:name=".TreeActivity"
+            android:name=".Activities.TreeActivity"
             android:exported="false" />
         <activity
-            android:name=".Menu"
+            android:name=".Activities.Menu"
             android:exported="false" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

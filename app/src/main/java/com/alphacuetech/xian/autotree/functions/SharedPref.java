@@ -10,7 +10,22 @@ public class SharedPref {
     }
 
     public String getUID(){
-        return "123";
+
+        SharedPreferences sh = context.getSharedPreferences("MySharedPref", context.MODE_PRIVATE);
+
+        String UID = sh.getString("UID", "#");
+
+        return UID;
+    }
+
+    public void setUID(String uid){
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        myEdit.putString("UID", uid);
+
+        myEdit.commit();
+
     }
 
     public void set_country(String country){

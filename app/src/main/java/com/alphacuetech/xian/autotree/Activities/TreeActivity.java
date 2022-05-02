@@ -1,25 +1,29 @@
-package com.alphacuetech.xian.autotree;
+package com.alphacuetech.xian.autotree.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alphacuetech.xian.autotree.ItemClickListener;
 import com.alphacuetech.xian.autotree.Models.DailyWeatherData;
 import com.alphacuetech.xian.autotree.Models.Tree;
+import com.alphacuetech.xian.autotree.R;
 import com.alphacuetech.xian.autotree.functions.SharedPref;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,11 +34,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class TreeActivity extends AppCompatActivity {
 
     String TAG = "XIAN";
+    String uid;
+
     DatabaseReference databaseRefTree, databaseRefUserTree;
     RecyclerView RV_tree;
     FloatingActionButton FBTN_add;
@@ -62,6 +67,7 @@ public class TreeActivity extends AppCompatActivity {
         FBTN_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addTree();
             }
         });
 
@@ -85,7 +91,8 @@ public class TreeActivity extends AppCompatActivity {
 
                 Log.i(TAG, "ALL TREE SIZE == "+trees.size());
 
-                String uid = "123456"; //new SharedPref(getApplicationContext()).getUID()
+                uid = new SharedPref(getApplicationContext()).getUID();
+                
                 getUserTreesFirebase(uid);
 
             }
@@ -105,7 +112,6 @@ public class TreeActivity extends AppCompatActivity {
     public void getUserTreesFirebase(String uid){
         //Query query = databaseRef.orderByChild("tree_id").equalTo(new SharedPref(getApplicationContext()).getUID());
         Query query = databaseRefUserTree.child(uid);
-        Log.i(TAG, new SharedPref(getApplicationContext()).getUID());
 
         ArrayList<Tree> user_trees = new ArrayList<>();
 
@@ -166,7 +172,7 @@ public class TreeActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
             private TextView TV_name, TV_water;
-            ImageView TV_img;
+            ImageView IV_img;
 
             public ViewHolder(View view) {
                 super(view);
@@ -174,7 +180,7 @@ public class TreeActivity extends AppCompatActivity {
 
                 TV_name = (TextView) view.findViewById(R.id.TV_name);
                 TV_water = (TextView) view.findViewById(R.id.TV_water);
-                TV_img = (ImageView) view.findViewById(R.id.TV_img);
+                IV_img = (ImageView) view.findViewById(R.id.IV_img);
 
                 view.setOnClickListener(this);
                 view.setOnLongClickListener(this);
@@ -228,6 +234,8 @@ public class TreeActivity extends AppCompatActivity {
             viewHolder.TV_water.setText(df.format(w_min)+"-"+df.format(w_max)+" ml");
 
 
+            Glide.with(getApplicationContext()).load(trees.get(position).getImg()).into(viewHolder.IV_img);
+
             viewHolder.setClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, final int position, boolean isLongClick) {
@@ -248,6 +256,138 @@ public class TreeActivity extends AppCompatActivity {
     }
 
     public void addTree(){
+        AlertDialog.Builder myBuilder = new AlertDialog.Builder(TreeActivity.this);
+        View myView = getLayoutInflater().inflate(R.layout.dialog_select_tree, null);
 
+        RecyclerView RV_add_tree;
+        Button btn_done;
+
+        RV_add_tree = myView.findViewById(R.id.RV_add_tree);
+        btn_done = myView.findViewById(R.id.btn_done);
+
+
+        myBuilder.setView(myView);
+        final AlertDialog dialog = myBuilder.create();
+        dialog.show();
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+                RV_add_tree.setLayoutManager(mLayoutManager);
+
+                RecyclerView.Adapter mRecycleAdapter = new CustomAdapterRVSelectTree(trees);
+                RV_add_tree.setAdapter(mRecycleAdapter);
+
+            }
+        });
+
+
+        btn_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+    }
+
+
+    public class CustomAdapterRVSelectTree extends RecyclerView.Adapter<CustomAdapterRVSelectTree.ViewHolder> {
+
+        private ArrayList<Tree> trees;
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+            private TextView TV_name, TV_water;
+            ImageView IV_img;
+
+            public ViewHolder(View view) {
+                super(view);
+                // Define click listener for the ViewHolder's View
+
+                TV_name = (TextView) view.findViewById(R.id.TV_name);
+                TV_water = (TextView) view.findViewById(R.id.TV_water);
+                IV_img = (ImageView) view.findViewById(R.id.IV_img);
+
+                view.setOnClickListener(this);
+                view.setOnLongClickListener(this);
+
+            }
+
+            private ItemClickListener clickListener;
+
+            public void setClickListener(ItemClickListener itemClickListener) {
+                this.clickListener = itemClickListener;
+            }
+
+            @Override
+            public void onClick(View view) {
+                clickListener.onClick(view, getPosition(), false);
+
+            }
+
+            @Override
+            public boolean onLongClick(View view) {
+                clickListener.onClick(view, getPosition(), true);
+                return true;
+            }
+        }
+
+        public CustomAdapterRVSelectTree(ArrayList<Tree> trees) {
+            this.trees = trees;
+        }
+
+        // Create new views (invoked by the layout manager)
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+            // Create a new view, which defines the UI of the list item
+            View view = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.single_tree, viewGroup, false);
+
+            return new CustomAdapterRVSelectTree.ViewHolder(view);
+        }
+
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+
+            viewHolder.TV_name.setText(trees.get((position)).getTree_name());
+
+            DecimalFormat df = new DecimalFormat("0.00");
+
+            double w_min = (trees.get(position).getWater_min()/trees.get(position).getTemp_min())*daily.getTemp().getMin();
+            double w_max = (trees.get(position).getWater_max()/trees.get(position).getTemp_max())*daily.getTemp().getMax();
+
+            //viewHolder.TV_water.setText(df.format(w_min)+"-"+df.format(w_max)+" ml");
+
+            Glide.with(getApplicationContext())
+                    .load(trees.get(position).getImg())
+                    .apply(new RequestOptions().override(60, 80))
+                    .into(viewHolder.IV_img);
+
+
+            viewHolder.setClickListener(new ItemClickListener() {
+                @Override
+                public void onClick(View view, final int position, boolean isLongClick) {
+                    if (isLongClick) {
+
+                    } else {
+                        viewHolder.TV_name.setBackgroundColor(getResources().getColor(R.color.design_default_color_secondary_variant));
+                        addTreeToFirebase(trees.get(position).getTree_id(), uid);
+                    }
+                }
+            });
+        }
+
+        // Return the size of your dataset (invoked by the layout manager)
+        @Override
+        public int getItemCount() {
+            return trees.size();
+        }
+    }
+
+    public void addTreeToFirebase(int id, String uid){
+        databaseRefUserTree.child(uid).child(""+id).child("tree_id").setValue(id);
+        Toast.makeText(getApplicationContext(), "Tree added", Toast.LENGTH_LONG).show();
     }
 }

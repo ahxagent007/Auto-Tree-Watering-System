@@ -1,16 +1,13 @@
-package com.alphacuetech.xian.autotree;
+package com.alphacuetech.xian.autotree.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.alphacuetech.xian.autotree.R;
 import com.alphacuetech.xian.autotree.functions.SharedPref;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
         btn_water_plant = findViewById(R.id.btn_water_plant);
         btn_device_status = findViewById(R.id.btn_device_status);
         btn_settings = findViewById(R.id.btn_settings);
+
+        String UID = new SharedPref(getApplicationContext()).getUID();
+
+        if (UID.equals("#")){
+            new SharedPref(getApplicationContext()).setUID(""+System.currentTimeMillis());
+        }
 
         btn_water_plant.setOnClickListener(new View.OnClickListener() {
             @Override
