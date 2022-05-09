@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -173,6 +175,7 @@ public class TreeActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
             private TextView TV_name, TV_water;
             ImageView IV_img;
+            ImageButton IB_delete;
 
             public ViewHolder(View view) {
                 super(view);
@@ -181,6 +184,7 @@ public class TreeActivity extends AppCompatActivity {
                 TV_name = (TextView) view.findViewById(R.id.TV_name);
                 TV_water = (TextView) view.findViewById(R.id.TV_water);
                 IV_img = (ImageView) view.findViewById(R.id.IV_img);
+                IB_delete = (ImageButton) view.findViewById(R.id.IB_delete);
 
                 view.setOnClickListener(this);
                 view.setOnLongClickListener(this);
@@ -222,8 +226,9 @@ public class TreeActivity extends AppCompatActivity {
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
 
+            viewHolder.IB_delete.setVisibility(View.VISIBLE);
             viewHolder.TV_name.setText(trees.get((position)).getTree_name());
 
             DecimalFormat df = new DecimalFormat("0.00");
@@ -231,7 +236,7 @@ public class TreeActivity extends AppCompatActivity {
             double w_min = (trees.get(position).getWater_min()/trees.get(position).getTemp_min())*daily.getTemp().getMin();
             double w_max = (trees.get(position).getWater_max()/trees.get(position).getTemp_max())*daily.getTemp().getMax();
 
-            viewHolder.TV_water.setText(df.format(w_min)+"-"+df.format(w_max)+" ml");
+            viewHolder.TV_water.setText(df.format(w_max)+"-"+df.format(w_min)+" ml");
 
 
             Glide.with(getApplicationContext()).load(trees.get(position).getImg()).into(viewHolder.IV_img);
@@ -244,6 +249,13 @@ public class TreeActivity extends AppCompatActivity {
                     } else {
 
                     }
+                }
+            });
+
+            viewHolder.IB_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteFromFirebase(trees.get(position).getTree_id(), uid);
                 }
             });
         }
@@ -291,7 +303,6 @@ public class TreeActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public class CustomAdapterRVSelectTree extends RecyclerView.Adapter<CustomAdapterRVSelectTree.ViewHolder> {
 
@@ -355,8 +366,8 @@ public class TreeActivity extends AppCompatActivity {
 
             DecimalFormat df = new DecimalFormat("0.00");
 
-            double w_min = (trees.get(position).getWater_min()/trees.get(position).getTemp_min())*daily.getTemp().getMin();
-            double w_max = (trees.get(position).getWater_max()/trees.get(position).getTemp_max())*daily.getTemp().getMax();
+            /*double w_min = (trees.get(position).getWater_min()/trees.get(position).getTemp_min())*daily.getTemp().getMin();
+            double w_max = (trees.get(position).getWater_max()/trees.get(position).getTemp_max())*daily.getTemp().getMax();*/
 
             viewHolder.TV_water.setText("Suited Weather: "+trees.get(position).getTemp_min()+"-"+trees.get(position).getTemp_max()+" C");
 
@@ -389,5 +400,10 @@ public class TreeActivity extends AppCompatActivity {
     public void addTreeToFirebase(int id, String uid){
         databaseRefUserTree.child(uid).child(""+id).child("tree_id").setValue(id);
         Toast.makeText(getApplicationContext(), "Tree added", Toast.LENGTH_LONG).show();
+    }
+
+    public void deleteFromFirebase(int id, String uid){
+        databaseRefUserTree.child(uid).child(""+id).removeValue();
+        Toast.makeText(getApplicationContext(), "Tree Removed", Toast.LENGTH_LONG).show();
     }
 }
